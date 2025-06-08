@@ -1,0 +1,42 @@
+[
+    {
+        "role": "user",
+        "content": "Fetch the current weather for a specified location."
+    },
+    {
+        "role": "assistant",
+        "content": "Which location's weather do you want to know?\n"
+    },
+    {
+        "role": "user",
+        "content": "lahore"
+    },
+    {
+        "role": "assistant",
+        "content": "OK. The current weather in Lahore, Punjab, Pakistan as of 2025-06-08 09:44 is 38.2\u00b0C (Sunny), feels like 37.3\u00b0C, wind 10.1 km/h SE, humidity 26% and UV index is 5.0.\n"
+    },
+    {
+        "role": "user",
+        "content": "joke"
+    },
+    {
+        "role": "assistant",
+        "content": "A guy walks into a bar and asks for 1.4 root beers.\nThe bartender says \"I'll have to charge you extra, that's a root beer float\".\nThe guy says \"In that case, better make it a double.\"\n"
+    },
+    {
+        "role": "user",
+        "content": "convert 20 euro to usd"
+    },
+    {
+        "role": "assistant",
+        "content": "20 EUR is currently equivalent to 22.81 USD.\n"
+    },
+    {
+        "role": "user",
+        "content": "what's the latest news about ai"
+    },
+    {
+        "role": "assistant",
+        "content": "Here are the latest news headlines about AI: the rapid growth of AI is raising concerns about its potential impact on society, including job displacement and the spread of misinformation. Recent advancements in AI have led to new applications in healthcare, finance, and transportation. Governments and organizations are discussing the need for ethical guidelines and regulations to govern the development and deployment of AI technologies.\n"
+    }
+]
