@@ -26,6 +26,8 @@ A powerful and extensible AI assistant built with [Chainlit](https://www.chainli
 ├── main.py # Entry point with chat logic, streaming, and tools
 ├── my_secrets.py # Handles environment variables securely
 ├── .env # API keys and config (not committed)
+├──images #contain output and interface images
+├──public #contain svg logos for starter tools
 └── chat_history.json # Chat history output file (on session end)
 
 ## 🚆Interface Preview
