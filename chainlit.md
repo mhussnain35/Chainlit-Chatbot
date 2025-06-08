@@ -1,14 +1,20 @@
-# Welcome to Chainlit! 🚀🤖
+# 🧠 Multi-Tool Chatbot (Chainlit + OpenRouter + Gemini)
 
-Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
+A powerful and extensible AI assistant built with [Chainlit](https://www.chainlit.io/), integrated with multiple LLM providers (Gemini, OpenRouter), and enhanced with custom tools like:
 
-## Useful Links 🔗
+- 🌦️ Weather Checker  
+- 🗞️ News Fetcher  
+- 😂 Programming Joke Teller  
+- 💱 Currency Exchange Rate Lookup  
+- ✍️ EasyWriter (Custom writing assistant)
 
-- **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
-- **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/k73SQ3FyUh) to ask questions, share your projects, and connect with other developers! 💬
+---
 
-We can't wait to see what you create with Chainlit! Happy coding! 💻😊
+## 🚀 Features
 
-## Welcome screen
-
-To modify the welcome screen, edit the `chainlit.md` file at the root of your project. If you do not want a welcome screen, just leave this file empty.
+- ✅ Supports multiple LLMs (Gemini, OpenRouter DeepSeek, OpenRouter Mistral)
+- 🔧 Modular tool-based architecture using `function_tool`
+- 🧠 Dynamic profile selection and model configuration
+- 💬 Streamed responses with live typing
+- 🧾 Chat history saved on session end
+- 🎯 Useful starter prompts for user engagement
