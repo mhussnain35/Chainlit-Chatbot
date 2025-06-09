@@ -7,6 +7,10 @@ A powerful and extensible AI assistant built with [Chainlit](https://www.chainli
 - 😂 Programming Joke Teller  
 - 💱 Currency Exchange Rate Lookup  
 - ✍️ EasyWriter (Custom writing assistant)
+- 📧 EmailWriter (Custom Email writing assistant)
+- 🌏 LanguageTranslator
+
+
 
 ---
 
