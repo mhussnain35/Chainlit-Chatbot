@@ -11,10 +11,10 @@ class Secrets:
         self.gemini_base_url = os.getenv("GEMINI_BASE_URL")
         self.gemini_api_model = os.getenv("GEMINI_API_MODEL")
 
-        self.openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
-        self.openrouter_base_url = os.getenv("OPENROUTER_BASE_URL")
-        self.openrouter_model1 = os.getenv("OPENROUTER_MODEL1")
-        self.openrouter_model2 = os.getenv("OPENROUTER_MODEL2")
+        self.together_api_key = os.getenv("TOGETHER_API_KEY")
+        self.together_base_url = os.getenv("TOGETHER_BASE_URL")
+        self.together_model = os.getenv("TOGETHER_MODEL")
+        self.together_model1 = os.getenv("TOGETHER_MODEL1")
 
         self.weather_api_key = os.getenv("WEATHER_API_KEY")
         self.weather_base_url = os.getenv("WEATHER_BASE_URL")

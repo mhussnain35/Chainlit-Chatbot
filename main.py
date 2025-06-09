@@ -13,12 +13,13 @@ from agents import (
     set_tracing_disabled,
 )
 from openai.types.responses import ResponseTextDeltaEvent
-from my_secrets import Secrets
 
+from my_secrets import Secrets
 
 secrets = Secrets()
 
-#created a tool to get the current weather using external api
+
+# created a tool to get the current weather using external api
 @function_tool("current_weather_tool")
 @cl.step(type="weather tool")
 def current_weather_tool(location: str) -> str:
@@ -43,7 +44,8 @@ def current_weather_tool(location: str) -> str:
     else:
         return "Sorry, I couldn't fetch the weather data. Please try again later"
 
-#created a tool to get the recent news update about any topic
+
+# created a tool to get the recent news update about any topic
 @function_tool("news_update")
 @cl.step(type="Recent News Update")
 def news_update(topic: str) -> str:
@@ -73,7 +75,8 @@ def news_update(topic: str) -> str:
     else:
         return "Sorry, I couldn't fetch the news at the moment. Please try again later."
 
-#created a random joke teller tool 
+
+# created a random joke teller tool
 @function_tool("joke_teller_tool")
 @cl.step(type="Joke Tool")
 def joke_teller_tool() -> str:
@@ -96,7 +99,8 @@ def joke_teller_tool() -> str:
     else:
         return "Sorry, I couldn't fetch a joke right now. Please try again later."
 
-#created a tool to get the current currency exchange rate for any currency
+
+# created a tool to get the current currency exchange rate for any currency
 @function_tool("currency_exchange_tool")
 @cl.step(type="Currency Exchange Tool")
 def currency_exchange_tool(base_currency: str, target_currency: str) -> str:
@@ -126,7 +130,8 @@ def currency_exchange_tool(base_currency: str, target_currency: str) -> str:
     else:
         return "Sorry, I couldn't fetch currency exchange data right now. Please try again later."
 
-#added starter for all the tools to make the use of tools fast
+
+# added starter for all the tools to make the use of tools fast
 @cl.set_starters
 async def starter():
     return [
@@ -163,28 +168,29 @@ async def starter():
         cl.Starter(
             label="LanguageTranslator",
             message="Translate any language into desired one.",
-            icon="/public/languages.svg"
-        )
+            icon="/public/languages.svg",
+        ),
     ]
 
-#Added chat profile to switch between different models
+
+# Added chat profile to switch between different models
 @cl.set_chat_profiles
 async def chat_profiles():
     return [
         cl.ChatProfile(
             name="Gemini-2.0-flash",
             markdown_description="The underlying LLM model is **Gemini-2.0-flash**.",
-            icon="/public/artificial-intelligence.svg"
+            icon="/public/artificial-intelligence.svg",
         ),
         cl.ChatProfile(
-            name="DeepSeek-chat-v3",
-            markdown_description="The underlying LLM model is **DeepSeek-chat-v3**.",
-            icon="/public/whale.svg"
+            name="Meta-Llama-32b",
+            markdown_description="The underlying LLM model is **Meta-Llama-32b**.",
+            icon="/public/llama.svg",
         ),
         cl.ChatProfile(
-            name="Mistralai-Devstral",
-            markdown_description="The underlying LLM model is **Mistralai-Devstral**.",
-            icon="/public/data-modelling.svg"
+            name="EXAONE-3.5-32b",
+            markdown_description="The underlying LLM model is **EXAONE-3.5-32b**.",
+            icon="/public/data-modelling.svg",
         ),
     ]
 
@@ -195,7 +201,7 @@ async def start():
     profile = cl.user_session.get("chat_profile") or {}
     selected_model = profile if profile else "Gemini-2.0-flash"
 
-#created model selection using if-else
+    # created model selection using if-else
     if selected_model == "Gemini-2.0-flash":
         external_client = AsyncOpenAI(
             base_url=secrets.gemini_base_url,
@@ -203,19 +209,19 @@ async def start():
         )
         model_name = secrets.gemini_api_model
 
-    elif selected_model == "DeepSeek-chat-v3":
+    elif selected_model == "Meta-Llama-32b":
         external_client = AsyncOpenAI(
-            base_url=secrets.openrouter_base_url,
-            api_key=secrets.openrouter_api_key,
+            base_url=secrets.together_base_url,
+            api_key=secrets.together_api_key,
         )
-        model_name = secrets.openrouter_model1
+        model_name = secrets.together_model
 
-    elif selected_model == "Mistralai-Devstral":
+    elif selected_model == "EXAONE-3.5-32b":
         external_client = AsyncOpenAI(
-            base_url=secrets.openrouter_base_url,
-            api_key=secrets.openrouter_api_key,
+            base_url=secrets.together_base_url,
+            api_key=secrets.together_api_key,
         )
-        model_name = secrets.openrouter_model2
+        model_name = secrets.together_model1
 
     else:
         external_client = AsyncOpenAI(
@@ -227,7 +233,7 @@ async def start():
     set_tracing_disabled(True)
     set_default_openai_client(external_client)
 
-#created agents which can be used as tools
+    # created agents which can be used as tools
     easy_writer_agent = Agent(
         name="EasyWriter",
         instructions="You can write easy by the requirements and given topic by user.",
@@ -265,10 +271,10 @@ async def start():
                     - Use formal or informal tone appropriately based on the source.
                     - If source_language is unknown, attempt to detect it.
                 """,
-    model=OpenAIChatCompletionsModel(
+        model=OpenAIChatCompletionsModel(
             openai_client=external_client,
             model=model_name,
-    )
+        ),
     )
     agent = Agent(
         name="Chatbot",
@@ -277,7 +283,7 @@ async def start():
             openai_client=external_client,
             model=model_name,
         ),
-        #added tools in main agent to make them implemented 
+        # added tools in main agent to make them implemented
         tools=[
             current_weather_tool,
             currency_exchange_tool,
@@ -294,20 +300,19 @@ async def start():
             language_translator.as_tool(
                 tool_name="LanguageTranslator",
                 tool_description="Translate any language into the desired language of the user.",
-            )
-
+            ),
         ],
     )
 
     cl.user_session.set("agent", agent)
     cl.user_session.set("chat_history", [])
-    cl.user_session.set("selected_model",selected_model)
+    cl.user_session.set("selected_model", selected_model)
 
 
 @cl.on_message
 async def main(message: cl.Message):
     selected_model = cl.user_session.get("selected_model") or "Gemini-2.0-flash"
-    #added a generating respond message while the response is being generated by the model
+    # added a generating respond message while the response is being generated by the model
     thinking_msg = cl.Message(content=f"🤖 {selected_model} is thinking...")
     await thinking_msg.send()
 
@@ -317,7 +322,7 @@ async def main(message: cl.Message):
     chat_history.append({"role": "user", "content": message.content})
 
     try:
-        #running the agent using the Runner class from open ai
+        # running the agent using the Runner class from open ai
         result = Runner.run_streamed(
             starting_agent=agent,
             input=chat_history,
@@ -326,7 +331,7 @@ async def main(message: cl.Message):
         response_message = cl.Message(content="")
         first_response = True
 
-#for loop to convert model response into chunks and then stream it
+        # for loop to convert model response into chunks and then stream it
         async for chunk in result.stream_events():
             if chunk.type == "raw_response_event" and isinstance(
                 chunk.data, ResponseTextDeltaEvent
@@ -350,7 +355,7 @@ async def main(message: cl.Message):
 
 @cl.on_chat_end
 def end():
-    #used json to store the history in a json file in root directory as chat ended
+    # used json to store the history in a json file in root directory as chat ended
     chat_history = cl.user_session.get("chat_history") or []
     with open("chat_history.json", "w") as f:
         json.dump(chat_history, f, indent=4)
