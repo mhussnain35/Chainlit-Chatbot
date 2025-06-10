@@ -353,7 +353,7 @@ async def main(message: cl.Message):
     await thinking_msg.send()
 
     agent = cast(Agent, cl.user_session.get("agent"))
-    chat_history = cl.user_session.get("chat_history") or []
+    chat_history:list = cl.user_session.get("chat_history") or []
 
     #added user prompt to history
     chat_history.append({
