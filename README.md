@@ -9,6 +9,8 @@ A powerful and extensible AI assistant built with [Chainlit](https://www.chainli
 - ✍️ EasyWriter (Custom writing assistant)
 - 📧 EmailWriter (Custom Email writing assistant)
 - 🌏 LanguageTranslator
+- ✨ Prompt Engineering
+
 
 
 
