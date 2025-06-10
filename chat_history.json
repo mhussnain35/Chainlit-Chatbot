@@ -1,34 +1,42 @@
 [
     {
         "role": "user",
-        "content": "Can you tell me a funny joke?"
+        "content": "Fetch the current weather for a specified location."
     },
     {
         "role": "assistant",
-        "content": "Two reasons I don't give money to homeless people.\n1) They are going to spend it all on drugs and alcohol\n2) I am going to spend it all on drugs and alcohol.\n"
+        "content": "Could you please tell me which location you're interested in?\n"
     },
     {
         "role": "user",
-        "content": "latest news about ai"
+        "content": "Lahore"
     },
     {
         "role": "assistant",
-        "content": "Here are the top 3 news headlines on 'AI':\n1. Spalletti flop azzurro, Il Messaggero titola: \"L'Italia vuole Ranieri\" (Source: Tuttomercatoweb.com)\n2. Tutto quello che c\u2019\u00e8 da sapere sui referendum sulla cittadinanza e sul lavoro (Source: Ilpost.it)\n3. RingCentral (NYSE:RNG) Coverage Initiated at KeyCorp (Source: ETF Daily News)\n"
+        "content": "OK. The current weather in Lahore, Punjab, Pakistan as of 2025-06-10 21:34 is 39.2\u00b0C (Mist), feels like 38.8\u00b0C, wind 9.7 km/h SSW, humidity 31% and UV index is 0.0.\n"
     },
     {
         "role": "user",
-        "content": "weather in lahore"
+        "content": "can you tell me a joke?"
     },
     {
         "role": "assistant",
-        "content": "The current weather in Lahore, Punjab, Pakistan is 40.1\u00b0C (Sunny), feels like 40.1\u00b0C, wind 7.9 km/h W, humidity 28% and UV index is 7.8.\n"
+        "content": "Sure, here's a joke for you: Why don't scientists trust atoms? Because they make up everything!\n"
     },
     {
         "role": "user",
-        "content": "convert 1usd to pkr"
+        "content": "Latest news about ai"
     },
     {
         "role": "assistant",
-        "content": "The exchange rate from 1 USD to PKR is 282.7140.\n"
+        "content": "Here are the top 3 news headlines on 'ai':\n\n1.  Va in pensione Misty Copeland l'etoile nera di New York (Source: ANSA.it)\n2.  bluer-ugv 6.37.1 (Source: Pypi.org)\n3.  Con Saily viaggi connesso ovunque: ora -30% su tutti i piani eSIM (Source: Html.it)\n"
+    },
+    {
+        "role": "user",
+        "content": "1usd to pkr"
+    },
+    {
+        "role": "assistant",
+        "content": "The exchange rate from USD to PKR is 282.2975.\n"
     }
 ]

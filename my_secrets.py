@@ -16,6 +16,10 @@ class Secrets:
         self.together_model = os.getenv("TOGETHER_MODEL")
         self.together_model1 = os.getenv("TOGETHER_MODEL1")
 
+        self.openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+        self.openrouter_base_url = os.getenv("OPENROUTER_BASE_URL")
+        self.openrouter_model = os.getenv("OPENROUTER_MODEL")
+
         self.weather_api_key = os.getenv("WEATHER_API_KEY")
         self.weather_base_url = os.getenv("WEATHER_BASE_URL")
 

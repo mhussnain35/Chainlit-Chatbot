@@ -170,6 +170,11 @@ async def starter():
             message="Translate any language into desired one.",
             icon="/public/languages.svg",
         ),
+        cl.Starter(
+            label="PromptEngineer",
+            message="Help Me Write a Better Prompt",
+            icon="/public/engine.svg"
+        )
     ]
 
 
@@ -192,9 +197,14 @@ async def chat_profiles():
             markdown_description="The underlying LLM model is **EXAONE-3.5-32b**.",
             icon="/public/data-modelling.svg",
         ),
+        cl.ChatProfile(
+            name="DeepSeek-Chat-V3",
+            markdown_description="The underlying LLM model is **DeepSeek-Chat-V3**.",
+            icon="/public/whale.svg"
+        ),
     ]
 
-
+#on_chat_start from chainlit to load the things which are necessary to load at start to every chat
 @cl.on_chat_start
 async def start():
     secrets = Secrets()
@@ -223,6 +233,12 @@ async def start():
         )
         model_name = secrets.together_model1
 
+    elif selected_model == "DeepSeek-Chat-V3":
+        external_client = AsyncOpenAI(
+            base_url=secrets.openrouter_base_url,
+            api_key=secrets.openrouter_api_key,
+        )
+        model_name = secrets.openrouter_model
     else:
         external_client = AsyncOpenAI(
             base_url=secrets.gemini_base_url,
@@ -242,6 +258,7 @@ async def start():
             model=model_name,
         ),
     )
+
     email_writer_agent = Agent(
         name="EmailWriter",
         instructions="""Compose well-structured emails from user inputs. 
@@ -252,6 +269,7 @@ async def start():
             model=model_name,
         ),
     )
+
     language_translator = Agent(
         name="LanguageTranslator",
         instructions="""
@@ -276,6 +294,20 @@ async def start():
             model=model_name,
         ),
     )
+
+    prompt_engineer_agent=Agent(
+        name="PromptEngineer",
+        instructions="""You are a senior prompt engineer with over a decade of experience in designing 
+                    highly effective prompts for language models like GPT-4. Given any topic, your task 
+                    is to craft the most clear, effective, and optimized prompt that will produce high-quality 
+                    results from the model. Ask clarifying questions if needed.""",
+        model=OpenAIChatCompletionsModel(
+            openai_client=external_client,
+            model=model_name,
+        ),
+    )
+
+    #main agent to run all tools and agents which will run as-tool
     agent = Agent(
         name="Chatbot",
         instructions="You are a helpful assistant.",
@@ -301,6 +333,10 @@ async def start():
                 tool_name="LanguageTranslator",
                 tool_description="Translate any language into the desired language of the user.",
             ),
+            prompt_engineer_agent.as_tool(
+                tool_name="PromptEngineer",
+                tool_description="a sineor prompt engineer with an experience of over a decade and give the most suitable prompt to the topic which user wants.",
+            ),
         ],
     )
 
@@ -319,10 +355,14 @@ async def main(message: cl.Message):
     agent = cast(Agent, cl.user_session.get("agent"))
     chat_history = cl.user_session.get("chat_history") or []
 
-    chat_history.append({"role": "user", "content": message.content})
-
+    #added user prompt to history
+    chat_history.append({
+        "role": "user",
+        "content": message.content
+        })
+#added try-except for proper error handling
     try:
-        # running the agent using the Runner class from open ai
+        # running the agent using the Runner class from openai
         result = Runner.run_streamed(
             starting_agent=agent,
             input=chat_history,
@@ -342,7 +382,12 @@ async def main(message: cl.Message):
                     first_response = False
                 await response_message.stream_token(chunk.data.delta)
 
-        chat_history.append({"role": "assistant", "content": response_message.content})
+#added model response in history
+        chat_history.append({
+            "role": "assistant", 
+            "content": response_message.content
+            })
+        
         cl.user_session.set("chat_history", chat_history)
         await response_message.update()
 
@@ -351,7 +396,6 @@ async def main(message: cl.Message):
         error_msg = cl.Message(content="An error occurred. Please try again.")
         await error_msg.send()
         print(f"Error: {e}")
-
 
 @cl.on_chat_end
 def end():
