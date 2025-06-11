@@ -46,7 +46,7 @@ An advanced, modular AI assistant built with [Chainlit](https://www.chainlit.io/
 
 ## 📬 Contact
 
-For questions or collaborations, reach out via GitHub Issues or [muhammadusman5965etc@gmail.com](mailto:muhammadusman5965etc@gmail.com)
+For questions, reach out via GitHub Issues or [muhammadusman5965etc@gmail.com](mailto:muhammadusman5965etc@gmail.com)
 
 ## 🚆Interface Preview
 
