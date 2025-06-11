@@ -1,24 +1,41 @@
-# 🧠 Multi-Tool Chatbot (Chainlit + TogetherAI + OpenRouter+ Gemini)
+# 🧠 Multi-Tool Chatbot  
+**(Chainlit + TogetherAI + OpenRouter + Gemini)**
 
-A powerful and extensible AI assistant built with [Chainlit](https://www.chainlit.io/), integrated with multiple LLM providers (Gemini, TogetherAI), and enhanced with custom tools like:
-
-- 🌦️ Weather Checker  
-- 🗞️ News Fetcher  
-- 😂 Programming Joke Teller  
-- 💱 Currency Exchange Rate Lookup  
-- ✍️ EasyWriter (Custom writing assistant)
-- 📧 EmailWriter (custom easy writer with proper format)
-- 💫 LanguageTranslator
-- ✨ Promt Engineering
-
+An advanced, modular AI assistant built with [Chainlit](https://www.chainlit.io/), integrated with multiple LLM providers like **Gemini**, **TogetherAI**, and **OpenRouter**, and powered by a suite of useful tools for enhanced user interaction.
 
 ---
 
-## 🚀 Features
+## ✨ Key Features
 
-- ✅ Supports multiple LLMs (Gemini, Together Meta, Together Exaone, Openrouter DeepSeek)
-- 🔧 Modular tool-based architecture using `function_tool`
-- 🧠 Dynamic profile selection and model configuration
-- 💬 Streamed responses with live typing
-- 🧾 Chat history saved on session end
-- 🎯 Useful starter prompts for user engagement
+- ✅ **Multi-LLM Support**  
+  Works with Gemini, Together Meta, Together Exaone, and OpenRouter DeepSeek.
+
+- 🔧 **Tool-Based Modular Architecture**  
+  Uses `function_tool` for easily pluggable features.
+
+- 🧠 **Dynamic Model Configuration**  
+  Profiles and models can be switched in real-time.
+
+- 💬 **Live Typing with Streamed Responses**  
+  Engaging, real-time chat experience.
+
+- 🧾 **Persistent Chat History**  
+  Session chat history saved to a JSON file on exit.
+
+- 🎯 **Starter Prompts for Engagement**  
+  Get users started with helpful and fun suggestions.
+
+---
+
+## 🧰 Built-in Tools
+
+- 🌦️ **Weather Checker**  
+- 🗞️ **News Fetcher**  
+- 😂 **Programming Joke Teller**  
+- 💱 **Currency Exchange Lookup**  
+- ✍️ **EasyWriter** – Writing assistant  
+- 📧 **EmailWriter** – Email generator  
+- 🌏 **Language Translator**  
+- 🧪 **Prompt Engineer** – Fine-tune your inputs
+
+---
