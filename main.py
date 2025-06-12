@@ -174,6 +174,11 @@ async def starter():
             label="PromptEngineer",
             message="Help Me Write a Better Prompt",
             icon="/public/engine.svg"
+        ),
+        cl.Starter(
+            label="CodeDebugger",
+            message="Debug the code and explain any issues or improvements.",
+            icon="/public/bug.svg"
         )
     ]
 
@@ -239,6 +244,7 @@ async def start():
             api_key=secrets.openrouter_api_key,
         )
         model_name = secrets.openrouter_model
+
     else:
         external_client = AsyncOpenAI(
             base_url=secrets.gemini_base_url,
@@ -301,6 +307,20 @@ async def start():
                     highly effective prompts for language models like GPT-4. Given any topic, your task 
                     is to craft the most clear, effective, and optimized prompt that will produce high-quality 
                     results from the model. Ask clarifying questions if needed.""",
+        model=OpenAIChatCompletionsModel(
+            openai_client=external_client,
+            model=model_name,
+        ),
+    )
+
+    code_debugger_agent=Agent(
+        name="CodeDubugger",
+        instructions="""
+                    You are a highly experienced software engineer with over 10 years of experience in debugging code. 
+                    Your job is to analyze the provided code, identify any bugs, errors, or potential improvements, and explain your findings clearly.
+                    You can work with any programming language unless specified otherwise. Always include concise explanations and suggest specific fixes or refactors.
+                    If the language or intent is unclear, ask for clarification before proceeding.
+                    """,
         model=OpenAIChatCompletionsModel(
             openai_client=external_client,
             model=model_name,
