@@ -36,7 +36,6 @@ An advanced, modular AI assistant built with [Chainlit](https://www.chainlit.io/
 ## 📁 Project Structure
 
 
-
 ├── main.py # Entry point with chat logic, streaming, and tools
 ├── my_secrets.py # Handles environment variables securely
 ├── .env # API keys and config (not committed)
