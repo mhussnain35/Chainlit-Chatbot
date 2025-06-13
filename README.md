@@ -30,6 +30,9 @@ An advanced, modular AI assistant built with [Chainlit](https://www.chainlit.io/
 - 📧 **EmailWriter** – Email generator  
 - 🌏 **Language Translator**  
 - 🧪 **Prompt Engineer**
+- 🌐 **IP Geolocation**
+- 🪲 **Code Debugger** - Debug and improve code
+
 
 ---
 
