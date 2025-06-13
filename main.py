@@ -395,6 +395,10 @@ async def start():
                 tool_name="PromptEngineer",
                 tool_description="a sineor prompt engineer with an experience of over a decade and give the most suitable prompt to the topic which user wants.",
             ),
+            code_debugger_agent.as_tool(
+                tool_name="CodeDebugger",
+                tool_description="A specialized tool for debugging any code."
+            ),
         ],
     )
 
