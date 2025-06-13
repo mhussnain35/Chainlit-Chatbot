@@ -130,6 +130,38 @@ def currency_exchange_tool(base_currency: str, target_currency: str) -> str:
     else:
         return "Sorry, I couldn't fetch currency exchange data right now. Please try again later."
 
+@function_tool("ip_geolocation_tool")
+@cl.step(type="ip_geolocation_tool")
+def ip_geolocation_tool(ip_address: str) -> str:
+    """
+    Retrieves geolocation and network information for a given IP address using the ipinfo.io API.
+
+    Returns city, region, country, ISP, and timezone. Requires a valid API token from ipinfo.io.
+
+    Args:
+        ip_address (str): The IP address to look up (e.g., '8.8.8.8').
+
+    Returns:
+        str: A formatted string with location and ISP details, or an error message.
+    """
+    api_token = secrets.ip_info_api
+    try:
+        response = requests.get(f"https://ipinfo.io/{ip_address}/json?token={api_token}", timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            location = f"{data.get('city', 'Unknown city')}, {data.get('region', 'Unknown region')}"
+            return (
+                f"📍 IP **{ip_address}** is located in **{location}**, **{data.get('country', 'Unknown')}**.\n"
+                f"🏢 ISP: {data.get('org', 'N/A')}\n"
+                f"🕒 Timezone: {data.get('timezone', 'N/A')}"
+            )
+        else:
+            return f"❌ API request failed with status code {response.status_code}."
+    except Exception as e:
+        return f"❌ An error occurred while retrieving IP data: {str(e)}"
+
+
+
 
 # added starter for all the tools to make the use of tools fast
 @cl.set_starters
@@ -154,6 +186,11 @@ async def starter():
             label="Currency Exchange",
             message="Fetch the current exchange rate for any currency?",
             icon="/public/exchange-rate.svg",
+        ),
+        cl.Starter(
+            label="IP Geolocation",
+            message="Where is this IP located?",
+            icon="/public/ip-address.svg"
         ),
         cl.Starter(
             label="EasyWriter",
@@ -341,6 +378,7 @@ async def start():
             currency_exchange_tool,
             news_update,
             joke_teller_tool,
+            ip_geolocation_tool,
             easy_writer_agent.as_tool(
                 tool_name="EasyWriter",
                 tool_description="You can write easy by the requirements and given topic by user.",

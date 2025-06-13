@@ -30,3 +30,5 @@ class Secrets:
 
         self.currency_exchange_api_key = os.getenv("CURRENCY_EXCHANGE_API_KEY")
         self.currency_exchange_base_url = os.getenv("CURRENCY_EXCHANGE_URL")
+
+        self.ip_info_api = os.getenv("IP_INFO_API")
