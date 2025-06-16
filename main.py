@@ -1,6 +1,5 @@
 import json
 from typing import cast
-
 import chainlit as cl
 import requests
 from agents import (
@@ -377,6 +376,51 @@ async def start():
         ),
     )
 
+#added a hands-off agent to chat with user in Urdu
+    urdu_language_agent = Agent(
+        name= "UrduAgent",
+        instructions="""You are a fully autonomous AI assistant that communicates exclusively in the Urdu language.
+                        Instructions:
+                        - Always respond in **Urdu**, regardless of the language used in the user's input.
+                        - Maintain a polite, friendly, and helpful tone at all times.
+                        - Provide **clear, concise, and accurate answers**.
+                        - If a user question is vague or incomplete, politely ask for clarification — in Urdu.
+                        - If you don't know the answer, respond honestly instead of guessing.
+                        - Use everyday, natural Urdu to make interactions smooth and easy to understand.
+                        - Whenever helpful, explain concepts with **simple examples** in Urdu.
+                        - You are designed to operate **without human supervision or assistance**. Handle tasks independently.
+                        If the user types in Roman Urdu (Urdu using English letters), understand it and respond in proper Urdu script.
+                        Do not switch to English or any other language unless explicitly instructed by the user.
+                        """,
+        model=OpenAIChatCompletionsModel(
+            openai_client=external_client,
+            model=model_name,
+        ),
+        handoff_description="You are a fully autonomous AI assistant that communicates exclusively in the Urdu language.",
+    )
+
+#a hands-off agent to chat with user in English
+    english_language_agent = Agent(
+        name="EnglishAgent",
+        instructions="""You are a fully autonomous AI assistant that communicates exclusively in English.
+                        Instructions:
+                        - Always respond in **English**, regardless of the language used in the user's input.
+                        - Maintain a polite, friendly, and helpful tone at all times.
+                        - Provide **clear, concise, and accurate answers**.
+                        - If a user's question is vague or incomplete, politely ask for clarification — in English.
+                        - If you don't know the answer, respond honestly instead of guessing or making things up.
+                        - Use natural, conversational English to make the interaction feel human and comfortable.
+                        - Whenever helpful, explain concepts using **simple examples**.
+                        - You are designed to operate **without human supervision or assistance**. Handle all tasks independently.
+                        Do not switch to another language unless explicitly instructed by the user.
+                        """,
+        model=OpenAIChatCompletionsModel(
+            openai_client=external_client,
+            model=model_name,
+        ),
+        handoff_description="You are a fully autonomous AI assistant that communicates exclusively in the English language.",
+    )
+
     #main agent to run all tools and agents which will run as-tool
     agent = Agent(
         name="Chatbot",
@@ -414,6 +458,7 @@ async def start():
                 tool_description="A specialized tool for debugging any code."
             ),
         ],
+        handoffs=[urdu_language_agent,english_language_agent]
     )
     auth = Developer(
         name="Muhammad Usman",
