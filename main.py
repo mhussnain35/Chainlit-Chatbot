@@ -165,7 +165,7 @@ def ip_geolocation_tool(ip_address: str) -> str:
 class Developer:
     name:str 
     mail:str
-    github_username:str
+    github_profile:str
 
 @function_tool("developer_info")
 @cl.step(type="Developer info")
@@ -173,7 +173,7 @@ def developer_info(developer:RunContextWrapper[Developer])->str:
 
     """Returns the name and mail of developer"""
 
-    return f"Developer Name: {developer.context.name},Developer Mail: {developer.context.mail},Github Username: {developer.context.github_username}"
+    return f"Developer Name: {developer.context.name},Developer Mail: {developer.context.mail},Github Profile: {developer.context.github_profile}"
 
 
 # added starter for all the tools to make the use of tools fast
@@ -418,7 +418,7 @@ async def start():
     auth = Developer(
         name="Muhammad Usman",
         mail="muhammadusman5965etc@gmail.com",
-        github_username="MuhammadUsmanGM"
+        github_profile="https://github.com/MuhammadUsmanGM"
     )
 
     cl.user_session.set("agent", agent)
