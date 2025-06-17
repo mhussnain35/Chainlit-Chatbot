@@ -1,6 +1,10 @@
 # 🧠 Multi-Tool Chatbot  
 **(Chainlit + TogetherAI + OpenRouter + Gemini)**
 
+
+[![Chainlit App](https://img.shields.io/badge/Chainlit-Launch-blue?logo=chatbot)](https://chainlit-chatbot-production.up.railway.app/)
+
+
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
 [![Chainlit](https://img.shields.io/badge/Built%20With-Chainlit-FF5F00)](https://www.chainlit.io/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](#license)
