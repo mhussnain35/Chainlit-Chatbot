@@ -40,6 +40,13 @@ An advanced, modular AI assistant built with [Chainlit](https://www.chainlit.io/
 - 🌐 **IP Geolocation**
 - 🪲 **Code Debugger** - Debug and improve code
 
+---
 
+## 🔮 Built-in Language Hand-Off Tools
+
+Easily switch or hand off tasks between:
+
+- ✨ English Language
+- ✨ Urdu Language
 
 ---
