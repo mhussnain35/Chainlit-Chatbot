@@ -1,6 +1,6 @@
 # 🧠 Multi-Tool Chatbot  
-**(Chainlit + TogetherAI + OpenRouter + Gemini)**
 
+**(Chainlit + TogetherAI + OpenRouter + Gemini)**
 An advanced, modular AI assistant built with [Chainlit](https://www.chainlit.io/), integrated with multiple LLM providers like **Gemini**, **TogetherAI**, and **OpenRouter**, and powered by a suite of useful tools for enhanced user interaction.
 
 ---
