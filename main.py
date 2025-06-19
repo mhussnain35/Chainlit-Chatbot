@@ -170,7 +170,7 @@ class Developer:
 @cl.step(type="Developer info")
 def developer_info(developer:RunContextWrapper[Developer])->str:
 
-    """Returns the name and mail of developer"""
+    """Returns the name, mail and github link of developer"""
 
     return f"Developer Name: {developer.context.name},Developer Mail: {developer.context.mail},Github Profile: {developer.context.github_profile}"
 
