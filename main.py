@@ -1,19 +1,21 @@
 import json
+from dataclasses import dataclass
 from typing import cast
+
 import chainlit as cl
 import requests
 from agents import (
     Agent,
     AsyncOpenAI,
     OpenAIChatCompletionsModel,
+    RunContextWrapper,
     Runner,
     function_tool,
     set_default_openai_client,
     set_tracing_disabled,
-    RunContextWrapper
 )
 from openai.types.responses import ResponseTextDeltaEvent
-from dataclasses import dataclass
+
 from my_secrets import Secrets
 
 secrets = Secrets()
@@ -130,6 +132,7 @@ def currency_exchange_tool(base_currency: str, target_currency: str) -> str:
     else:
         return "Sorry, I couldn't fetch currency exchange data right now. Please try again later."
 
+
 @function_tool("ip_geolocation_tool")
 @cl.step(type="ip_geolocation_tool")
 def ip_geolocation_tool(ip_address: str) -> str:
@@ -146,7 +149,9 @@ def ip_geolocation_tool(ip_address: str) -> str:
     """
     api_token = secrets.ip_info_api
     try:
-        response = requests.get(f"https://ipinfo.io/{ip_address}/json?token={api_token}", timeout=5)
+        response = requests.get(
+            f"https://ipinfo.io/{ip_address}/json?token={api_token}", timeout=5
+        )
         if response.status_code == 200:
             data = response.json()
             location = f"{data.get('city', 'Unknown city')}, {data.get('region', 'Unknown region')}"
@@ -160,16 +165,17 @@ def ip_geolocation_tool(ip_address: str) -> str:
     except Exception as e:
         return f"❌ An error occurred while retrieving IP data: {str(e)}"
 
+
 @dataclass
 class Developer:
-    name:str 
-    mail:str
-    github_profile:str
+    name: str
+    mail: str
+    github_profile: str
+
 
 @function_tool("developer_info")
 @cl.step(type="Developer info")
-def developer_info(developer:RunContextWrapper[Developer])->str:
-
+def developer_info(developer: RunContextWrapper[Developer]) -> str:
     """Returns the name, mail and github link of developer"""
 
     return f"Developer Name: {developer.context.name},Developer Mail: {developer.context.mail},Github Profile: {developer.context.github_profile}"
@@ -202,7 +208,7 @@ async def starter():
         cl.Starter(
             label="IP Geolocation",
             message="Where is this IP located?",
-            icon="/public/ip-address.svg"
+            icon="/public/ip-address.svg",
         ),
         cl.Starter(
             label="EasyWriter",
@@ -222,13 +228,13 @@ async def starter():
         cl.Starter(
             label="PromptEngineer",
             message="Help Me Write a Better Prompt",
-            icon="/public/engine.svg"
+            icon="/public/engine.svg",
         ),
         cl.Starter(
             label="CodeDebugger",
             message="Debug the code and explain any issues or improvements.",
-            icon="/public/bug.svg"
-        )
+            icon="/public/bug.svg",
+        ),
     ]
 
 
@@ -254,11 +260,12 @@ async def chat_profiles():
         cl.ChatProfile(
             name="DeepSeek-Chat-V3",
             markdown_description="The underlying LLM model is **DeepSeek-Chat-V3**.",
-            icon="/public/whale.svg"
+            icon="/public/whale.svg",
         ),
     ]
 
-#on_chat_start from chainlit to load the things which are necessary to load at start to every chat
+
+# on_chat_start from chainlit to load the things which are necessary to load at start to every chat
 @cl.on_chat_start
 async def start():
     secrets = Secrets()
@@ -350,7 +357,7 @@ async def start():
         ),
     )
 
-    prompt_engineer_agent=Agent(
+    prompt_engineer_agent = Agent(
         name="PromptEngineer",
         instructions="""You are a senior prompt engineer with over a decade of experience in designing 
                     highly effective prompts for language models like GPT-4. Given any topic, your task 
@@ -362,7 +369,7 @@ async def start():
         ),
     )
 
-    code_debugger_agent=Agent(
+    code_debugger_agent = Agent(
         name="CodeDubugger",
         instructions="""
                     You are a highly experienced software engineer with over 10 years of experience in debugging code. 
@@ -376,9 +383,9 @@ async def start():
         ),
     )
 
-#added a hands-off agent to chat with user in Urdu
+    # added a hands-off agent to chat with user in Urdu
     urdu_language_agent = Agent(
-        name= "UrduAgent",
+        name="UrduAgent",
         instructions="""You are a fully autonomous AI assistant that communicates exclusively in the Urdu language.
                         Instructions:
                         - Always respond in **Urdu**, regardless of the language used in the user's input.
@@ -399,7 +406,7 @@ async def start():
         handoff_description="You are a fully autonomous AI assistant that communicates exclusively in the Urdu language.",
     )
 
-#a hands-off agent to chat with user in English
+    # a hands-off agent to chat with user in English
     english_language_agent = Agent(
         name="EnglishAgent",
         instructions="""You are a fully autonomous AI assistant that communicates exclusively in English.
@@ -421,7 +428,7 @@ async def start():
         handoff_description="You are a fully autonomous AI assistant that communicates exclusively in the English language.",
     )
 
-    #main agent to run all tools and agents which will run as-tool
+    # main agent to run all tools and agents which will run as-tool
     agent = Agent(
         name="Chatbot",
         instructions="You are a helpful assistant.",
@@ -455,21 +462,21 @@ async def start():
             ),
             code_debugger_agent.as_tool(
                 tool_name="CodeDebugger",
-                tool_description="A specialized tool for debugging any code."
+                tool_description="A specialized tool for debugging any code.",
             ),
         ],
-        handoffs=[urdu_language_agent,english_language_agent]
+        handoffs=[urdu_language_agent, english_language_agent],
     )
     auth = Developer(
-        name="Muhammad Usman",
-        mail="muhammadusman5965etc@gmail.com",
-        github_profile="https://github.com/MuhammadUsmanGM"
+        name="Muhammad Usman & Muhammad Hussnain",
+        mail="muhammadusman5965etc@gmail.com & hussnainbhi.78@gmail.com",
+        github_profile="https://github.com/MuhammadUsmanGM & https://github.com/mhussnain35",
     )
 
     cl.user_session.set("agent", agent)
     cl.user_session.set("chat_history", [])
     cl.user_session.set("selected_model", selected_model)
-    cl.user_session.set("auth",auth)
+    cl.user_session.set("auth", auth)
 
 
 @cl.on_message
@@ -481,20 +488,15 @@ async def main(message: cl.Message):
     await thinking_msg.send()
 
     agent = cast(Agent, cl.user_session.get("agent"))
-    chat_history:list = cl.user_session.get("chat_history") or []
+    chat_history: list = cl.user_session.get("chat_history") or []
 
-    #added user prompt to history
-    chat_history.append({
-        "role": "user",
-        "content": message.content
-        })
-#added try-except for proper error handling
+    # added user prompt to history
+    chat_history.append({"role": "user", "content": message.content})
+    # added try-except for proper error handling
     try:
         # running the agent using the Runner class from openai
         result = Runner.run_streamed(
-            starting_agent=agent,
-            input=chat_history,
-            context=auth
+            starting_agent=agent, input=chat_history, context=auth
         )
 
         response_message = cl.Message(content="")
@@ -511,12 +513,9 @@ async def main(message: cl.Message):
                     first_response = False
                 await response_message.stream_token(chunk.data.delta)
 
-#added model response in history
-        chat_history.append({
-            "role": "assistant", 
-            "content": response_message.content
-            })
-        
+        # added model response in history
+        chat_history.append({"role": "assistant", "content": response_message.content})
+
         cl.user_session.set("chat_history", chat_history)
         await response_message.update()
 
@@ -525,6 +524,7 @@ async def main(message: cl.Message):
         error_msg = cl.Message(content="An error occurred. Please try again.")
         await error_msg.send()
         print(f"Error: {e}")
+
 
 @cl.on_chat_end
 def end():
