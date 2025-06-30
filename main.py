@@ -10,11 +10,23 @@ from agents import (
     function_tool,
     set_default_openai_client,
     set_tracing_disabled,
-    RunContextWrapper
+    set_default_openai_api,
+    RunContextWrapper,
+    RunConfig
 )
 from openai.types.responses import ResponseTextDeltaEvent
 from dataclasses import dataclass
 from my_secrets import Secrets
+#importing input_guardrails
+from input_guardrail import toxicity_guardrail, malicious_intent_guardrail
+#importing output_guardrails
+from output_guardrail import (toxicity_output_guardrail,
+                            pii_output_guardrail, 
+                            hallucination_output_guardrail,
+                            verbosity_output_guardrail,
+                            harmful_advice_output_guardrail,
+                            sensitive_topic_output_guardrail,
+                            self_reference_output_guardrail)
 
 secrets = Secrets()
 
@@ -210,7 +222,7 @@ async def starter():
             icon="/public/easy.svg",
         ),
         cl.Starter(
-            label="EmailWriter",
+            label="ProfessionalEmailComposer",
             message="Can you help me write an email for any topic?",
             icon="/public/up-arrow.svg",
         ),
@@ -303,31 +315,26 @@ async def start():
 
     set_tracing_disabled(True)
     set_default_openai_client(external_client)
+    set_default_openai_api("chat_completions")
 
+#created a create_agent function to create agents efficiently
+    def create_agent(name,instructions):
+        return Agent(
+            name=name,
+            instructions=instructions,
+            model = OpenAIChatCompletionsModel(
+                openai_client=external_client,
+                model=model_name,
+            )
+        )
     # created agents which can be used as tools
-    easy_writer_agent = Agent(
-        name="EasyWriter",
-        instructions="You can write easy by the requirements and given topic by user.",
-        model=OpenAIChatCompletionsModel(
-            openai_client=external_client,
-            model=model_name,
-        ),
-    )
+    easy_writer_agent = create_agent("EasyWriter","You can write easy by the requirements and given topic by user.")
 
-    email_writer_agent = Agent(
-        name="EmailWriter",
-        instructions="""Compose well-structured emails from user inputs. 
+    email_writer_agent = create_agent("ProfessionalEmailComposer","""Compose well-structured emails from user inputs. 
                     Adjust tone (formal/informal), add a subject line, and 
-                    end with a custom sign-off.""",
-        model=OpenAIChatCompletionsModel(
-            openai_client=external_client,
-            model=model_name,
-        ),
-    )
+                    end with a custom sign-off.""",)
 
-    language_translator = Agent(
-        name="LanguageTranslator",
-        instructions="""
+    language_translator = create_agent("LanguageTranslator","""
                 Translate text from one language to another while preserving meaning, tone, and context.
 
                 Args:
@@ -343,38 +350,19 @@ async def start():
                     - Translate idioms or expressions naturally where possible.
                     - Use formal or informal tone appropriately based on the source.
                     - If source_language is unknown, attempt to detect it.
-                """,
-        model=OpenAIChatCompletionsModel(
-            openai_client=external_client,
-            model=model_name,
-        ),
-    )
+                """,)
 
-    prompt_engineer_agent=Agent(
-        name="PromptEngineer",
-        instructions="""You are a senior prompt engineer with over a decade of experience in designing 
+    prompt_engineer_agent=create_agent("PromptEngineer","""You are a senior prompt engineer with over a decade of experience in designing 
                     highly effective prompts for language models like GPT-4. Given any topic, your task 
                     is to craft the most clear, effective, and optimized prompt that will produce high-quality 
-                    results from the model. Ask clarifying questions if needed.""",
-        model=OpenAIChatCompletionsModel(
-            openai_client=external_client,
-            model=model_name,
-        ),
-    )
+                    results from the model. Ask clarifying questions if needed.""",)
 
-    code_debugger_agent=Agent(
-        name="CodeDubugger",
-        instructions="""
+    code_debugger_agent=create_agent("CodeDebugger","""
                     You are a highly experienced software engineer with over 10 years of experience in debugging code. 
                     Your job is to analyze the provided code, identify any bugs, errors, or potential improvements, and explain your findings clearly.
                     You can work with any programming language unless specified otherwise. Always include concise explanations and suggest specific fixes or refactors.
                     If the language or intent is unclear, ask for clarification before proceeding.
-                    """,
-        model=OpenAIChatCompletionsModel(
-            openai_client=external_client,
-            model=model_name,
-        ),
-    )
+                    """,)
 
 #added a hands-off agent to chat with user in Urdu
     urdu_language_agent = Agent(
@@ -439,10 +427,10 @@ async def start():
             developer_info,
             easy_writer_agent.as_tool(
                 tool_name="EasyWriter",
-                tool_description="You can write easy by the requirements and given topic by user.",
+                tool_description="Easily generate content based on user-provided requirements and topics.",
             ),
             email_writer_agent.as_tool(
-                tool_name="EmailWriter",
+                tool_name="ProfessionalEmailComposer",
                 tool_description="Write easy-to-understand content based on the topic and instructions provided by the user.",
             ),
             language_translator.as_tool(
@@ -451,14 +439,21 @@ async def start():
             ),
             prompt_engineer_agent.as_tool(
                 tool_name="PromptEngineer",
-                tool_description="a sineor prompt engineer with an experience of over a decade and give the most suitable prompt to the topic which user wants.",
+                tool_description="A senior prompt engineer with over a decade of experience who crafts optimized prompts based on user requirements.",
             ),
             code_debugger_agent.as_tool(
                 tool_name="CodeDebugger",
                 tool_description="A specialized tool for debugging any code."
             ),
         ],
-        handoffs=[urdu_language_agent,english_language_agent]
+        handoffs=[urdu_language_agent,english_language_agent],
+        input_guardrails=[toxicity_guardrail,malicious_intent_guardrail],
+        output_guardrails=[toxicity_output_guardrail,
+                           pii_output_guardrail,
+                           sensitive_topic_output_guardrail,
+                           hallucination_output_guardrail,
+                           self_reference_output_guardrail,
+                           harmful_advice_output_guardrail],
     )
     auth = Developer(
         name="Muhammad Usman",
@@ -522,7 +517,7 @@ async def main(message: cl.Message):
 
     except Exception as e:
         await thinking_msg.remove()
-        error_msg = cl.Message(content="An error occurred. Please try again.")
+        error_msg = cl.Message(content=f"❌ An error occurred: {str(e)}")
         await error_msg.send()
         print(f"Error: {e}")
 
