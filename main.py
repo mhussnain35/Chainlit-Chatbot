@@ -468,7 +468,7 @@ async def start():
         handoffs=[urdu_language_agent, english_language_agent],
     )
     auth = Developer(
-        name="Muhammad Usman & Muhammad Hussnain",
+        name="Muhammad Usman & Muhammad Hussnain Khan",
         mail="muhammadusman5965etc@gmail.com & hussnainbhi.78@gmail.com",
         github_profile="https://github.com/MuhammadUsmanGM & https://github.com/mhussnain35",
     )
